@@ -11,4 +11,15 @@ class User < ActiveRecord::Base
 
   # note that this include statement comes AFTER the devise block above
   include DeviseTokenAuth::Concerns::User
+
+  # associations
+  has_many :qbo_accounts
+  belongs_to :current_account, foreign_key: :current_account_id, class_name: 'QboAccount', optional: true
+
+  def self.find_or_create_me(email)
+    User.where(email: email).first_or_initialize.tap do |user|
+      user.password = Devise.friendly_token
+      user.save!(validate: false)
+    end
+  end
 end

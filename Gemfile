@@ -25,11 +25,17 @@ gem 'bootsnap', '>= 1.4.2', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
+# authentication
 gem 'devise_token_auth'
+
+# QuickBooks
+gem 'intuit-oauth'
+gem 'qbo_api'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'dotenv-rails', groups: [:development, :test]
 end
 
 group :development do
