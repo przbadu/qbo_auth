@@ -1,7 +1,18 @@
 Rails.application.routes.draw do
-  get 'quickbooks/oauth2'
-  get 'quickbooks/callback'
-  get 'quickbooks/disconnect'
   mount_devise_token_auth_for 'User', at: 'auth'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  resource :quickbooks, only: [] do
+    collection do
+      get :oauth2
+      get :callback
+      get :disconnect
+    end
+  end
+
+  resource :users, only: [] do
+    collection do
+      post :exchange_code_for_token
+    end
+  end
+  resource :vendors, only: [:index]
 end
