@@ -27,11 +27,10 @@ class QuickbooksController < ApplicationController
 
       # sign_in_and_redirect user
       token = user.create_new_auth_token
-      code = Aes256Encrypter.encode(token.to_json)
-      redirect_to "#{ENV['CLIENT_URL']}?code=#{code}"
+      code = JWT.encode token, ENV['CLIENT_CALLBACK_URL'], 'HS256'
+      redirect_to "#{ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
     else
-      flash[:alert] = 'Problem connecting to QuickBooks server'
-      redirect_to "#{ENV['CLIENT_URL']}?error=true"
+      redirect_to "#{ENV['CLIENT_CALLBACK_URL']}?error=true"
     end
   end
 

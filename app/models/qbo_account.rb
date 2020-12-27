@@ -1,5 +1,6 @@
 class QboAccount < ApplicationRecord
   # associations
+  has_many :activities
   belongs_to :user
 
   def self.create_from_oauth2(realm_id, token)
@@ -17,10 +18,10 @@ class QboAccount < ApplicationRecord
   end
 
   def token_expired?
-    expires_in <= Time.now.utc
+    self.expires_in <= Time.now.utc
   end
 
   def x_token_expired?
-    x_refresh_token_expires_in <= Time.now.utc
+    self.x_refresh_token_expires_in <= Time.now.utc
   end
 end

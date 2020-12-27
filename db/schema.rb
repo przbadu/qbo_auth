@@ -10,17 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_25_052750) do
+ActiveRecord::Schema.define(version: 2020_12_27_031643) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.integer "action"
+    t.string "entity_name"
+    t.string "third_party_ids", default: [], array: true
+    t.jsonb "logs", default: {}, null: false
+    t.bigint "user_id", null: false
+    t.bigint "qbo_account_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["qbo_account_id"], name: "index_activities_on_qbo_account_id"
+    t.index ["user_id"], name: "index_activities_on_user_id"
+  end
 
   create_table "qbo_accounts", force: :cascade do |t|
     t.string "token_type"
-    t.integer "expires_in"
+    t.datetime "expires_in"
     t.string "refresh_token"
-    t.integer "x_refresh_token_expires_in"
+    t.datetime "x_refresh_token_expires_in"
     t.string "access_token"
+    t.string "realm_id"
+    t.string "company_name"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -53,5 +69,7 @@ ActiveRecord::Schema.define(version: 2020_12_25_052750) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "activities", "qbo_accounts"
+  add_foreign_key "activities", "users"
   add_foreign_key "qbo_accounts", "users"
 end

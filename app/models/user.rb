@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   # associations
+  has_many :activities
   has_many :qbo_accounts
   belongs_to :current_account, foreign_key: :current_account_id, class_name: 'QboAccount', optional: true
 

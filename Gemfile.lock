@@ -64,6 +64,9 @@ GEM
     concurrent-ruby (1.1.7)
     crass (1.0.6)
     database_cleaner (1.8.5)
+    debase (0.2.4.1)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.11)
     devise (4.7.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -104,6 +107,7 @@ GEM
       json (>= 1.8.0)
       rsa-pem-from-mod-exp (~> 0.1.0)
     json (2.3.1)
+    jwt (2.2.1)
     listen (3.3.3)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -172,6 +176,7 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redis (4.2.5)
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
@@ -193,6 +198,8 @@ GEM
       rspec-mocks (~> 3.9)
       rspec-support (~> 3.9)
     rspec-support (3.10.0)
+    ruby-debug-ide (0.7.2)
+      rake (>= 0.8.1)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -223,17 +230,21 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   database_cleaner
+  debase
   devise_token_auth
   dotenv-rails
   factory_bot_rails
   intuit-oauth
+  jwt
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   qbo_api
   rack-cors
   rails (~> 6.0.3, >= 6.0.3.4)
+  redis (~> 4.0)
   rspec-rails
+  ruby-debug-ide
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
 
+  root 'quickbooks#oauth2'
   resource :quickbooks, only: [] do
     collection do
       get :oauth2
@@ -9,10 +10,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :users, only: [] do
+  resources :users, only: [] do
     collection do
       post :exchange_code_for_token
     end
   end
-  resource :vendors, only: [:index]
+  resources :vendors, only: :index
+  resources :customers, only: [:index] do
+    collection do
+      post :mark_inactive
+    end
+  end
+
+  # Action cable
+  mount ActionCable.server => '/cable'
 end

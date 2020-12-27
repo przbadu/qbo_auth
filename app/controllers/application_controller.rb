@@ -5,7 +5,7 @@ class ApplicationController < ActionController::API
   before_action :refresh_token!
 
   def current_account
-    @current_account ||= current_user.qbo_accounts.first if current_user
+    @current_account ||= current_user.current_account if current_user
   end
 
   def qbo_api
