@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
 
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: :home
   before_action :refresh_token!
 
   def current_account

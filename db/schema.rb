@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2020_12_27_031643) do
     t.string "entity_name"
     t.string "third_party_ids", default: [], array: true
     t.jsonb "logs", default: {}, null: false
+    t.string "job_id"
     t.bigint "user_id", null: false
     t.bigint "qbo_account_id", null: false
     t.datetime "created_at", precision: 6, null: false

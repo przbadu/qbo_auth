@@ -7,6 +7,7 @@ class CreateActivities < ActiveRecord::Migration[6.0]
       t.string :entity_name
       t.string :third_party_ids, array: true, default: []
       t.jsonb :logs, null: false, default: {}
+      t.string :job_id
       t.belongs_to :user, null: false, foreign_key: true
       t.belongs_to :qbo_account, null: false, foreign_key: true
 

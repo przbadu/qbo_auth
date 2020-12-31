@@ -4,28 +4,21 @@ class CustomersController < ApplicationController
     render json: @customers.as_json
   end
 
+  def with_logs
+    customers = qbo_api.all(:customers)
+    logs = current_account.activities.user_with_job_id(current_user, params[:job_id])
+
+    render json: { customers: customers, logs: logs }
+  end
+
   def mark_inactive
-    ids = params[:ids]
-    logs = []
+    @job = CustomersBulkDeleteJob.perform_later({
+      ids: params[:ids], 
+      account_id: current_account.id,
+      user_id: current_user.id,
+    })
+    puts "JOB ID: #{@job.job_id}"
 
-    ids.each do |id|
-      begin
-        qbo_api.deactivate(:customer, id: id)
-        logs << { id: id, status: 'success', message: '' }
-      rescue => e
-        logs << { id: id, status: 'failed', message: e.message }
-      end
-    end
-
-    current_account.activities.create(
-      action: Activity.actions[:bulk_archive],
-      entity_name: 'Customer',
-      third_party_ids: ids,
-      logs: logs,
-      user: current_user
-    )
-
-    @customers = qbo_api.all(:customers)
-    render json: { customers: @customers.as_json, logs: logs }
+    render json: { job_id: @job.job_id }
   end
 end

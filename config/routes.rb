@@ -19,9 +19,13 @@ Rails.application.routes.draw do
   resources :customers, only: [:index] do
     collection do
       post :mark_inactive
+      get :with_logs
     end
   end
 
   # Action cable
   mount ActionCable.server => '/cable'
+  # sidekiq
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 end
