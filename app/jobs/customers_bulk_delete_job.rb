@@ -20,9 +20,7 @@ class CustomersBulkDeleteJob < ApplicationJob
         logs << { id: id, status: 'failed', message: e.message }
       end
       percent = ((idx + 1) * 100) / total
-      # ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: percent >= 100 ? 99 : percent}
-      puts "percent #{percent}"
-      ActionCable.server.broadcast "bulk_delete_channel", { percent: percent >= 100 ? 99 : percent}
+      ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: percent >= 100 ? 99 : percent}
     end
 
     account.activities.create(
@@ -34,7 +32,6 @@ class CustomersBulkDeleteJob < ApplicationJob
       job_id: @job_id
     )
 
-    # ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: 100 }
-    ActionCable.server.broadcast 'bulk_delete_channel', { percent: 100 }
+    ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: 100 }
   end
 end

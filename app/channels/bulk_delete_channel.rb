@@ -1,7 +1,7 @@
 class BulkDeleteChannel < ApplicationCable::Channel
   def subscribed
-    # stream_from "bulk_delete_channel_#{params[:job_id]}"
-    stream_from 'bulk_delete_channel'
+    stream_from "bulk_delete_channel_#{params[:room]}"
+    # stream_from 'bulk_delete_channel'
   end
 
   def unsubscribed

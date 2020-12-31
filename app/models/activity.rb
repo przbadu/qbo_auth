@@ -5,7 +5,4 @@ class Activity < ApplicationRecord
   # associations
   belongs_to :user
   belongs_to :qbo_account
-
-  ### scopes
-  scope :user_with_job_id, -> (user, job_id)  { where(user: user, job_id: job_id)}
 end
