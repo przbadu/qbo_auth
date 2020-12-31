@@ -26,7 +26,7 @@ class ApplicationController < ActionController::API
       ENV['QBO_CLIENT_ID'],
       ENV['QBO_CLIENT_SECRET'],
       "#{root_url}quickbooks/callback",
-      Rails.env
+      ENV['QBO_PRODUCTION_MODE'].to_s == 'true' ? 'production' : 'development'
     )
   end
 end
