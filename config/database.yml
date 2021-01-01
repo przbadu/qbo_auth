@@ -78,8 +78,10 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+# production:
+#   <<: *default
+#   database: qbo_auth_production
+#   username: qbo_auth
+#   password: <%= ENV['QBO_AUTH_DATABASE_PASSWORD'] %>
 production:
-  <<: *default
-  database: qbo_auth_production
-  username: qbo_auth
-  password: <%= ENV['QBO_AUTH_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
