@@ -25,7 +25,7 @@ class ApplicationController < ActionController::API
     IntuitOAuth::Client.new(
       ENV['QBO_CLIENT_ID'],
       ENV['QBO_CLIENT_SECRET'],
-      "#{root_url}quickbooks/callback",
+      "#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback",
       ENV['QBO_PRODUCTION_MODE'].to_s == 'true' ? 'production' : 'development'
     )
   end
