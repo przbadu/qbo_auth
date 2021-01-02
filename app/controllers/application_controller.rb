@@ -22,6 +22,8 @@ class ApplicationController < ActionController::API
   end
 
   def oauth_client
+    Rails.logger.warn "URL2::::::::::::#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
+
     IntuitOAuth::Client.new(
       ENV['QBO_CLIENT_ID'],
       ENV['QBO_CLIENT_SECRET'],
