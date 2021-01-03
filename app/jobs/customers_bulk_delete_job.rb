@@ -11,15 +11,36 @@ class CustomersBulkDeleteJob < ApplicationJob
     account = QboAccount.find(account_id)
     qbo_api = QboApi.new(access_token: account.access_token, realm_id: account.realm_id)
 
+    payload = {BatchItemRequest: []}
+    ids.in_groups_of(30).each_with_index do |group_ids, idx|
+      group_ids.each do |id_with_name|
+        next if id_with_name.nil?
 
-    ids.each_with_index do |id, idx|
-      begin
-        qbo_api.deactivate(:customer, id: id)
-        logs << { id: id, status: 'success', message: '' }
-      rescue => e
-        logs << { id: id, status: 'failed', message: e.message }
+        name, id = id_with_name.split('::')
+        payload[:BatchItemRequest] << {
+          "bId": "bid#{idx}:::#{id}",
+          "operation": "update",
+          "Customer": {
+            'Id': id.to_s,
+            'DisplayName': name,
+            'Active': false
+          }
+        }
       end
-      percent = ((idx + 1) * 100) / total
+
+      response = qbo_api.batch(payload)
+      # prepare logs
+      response['BatchItemResponse'].each do |r|
+        response_id = r['bId'].split(':::').last
+        errors = r.dig('Fault', 'Error')
+        if errors.present?
+          logs << { id: response_id, status: 'failed', message: errors.map{ |e| e['Detail'] }.join(', ') }
+        else
+          logs << { id: response_id, status: 'success', message: ''}
+        end
+      end
+
+      percent = ((idx + 1) * 30 * 100) / total
       ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: percent >= 100 ? 99 : percent}
     end
 
@@ -31,7 +52,6 @@ class CustomersBulkDeleteJob < ApplicationJob
       user_id: user_id,
       job_id: @job_id
     )
-
-    ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: 100 }
+    ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: 100}
   end
 end
