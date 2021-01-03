@@ -7,12 +7,13 @@ class CustomersBulkDeleteJob < ApplicationJob
     account_id = args[:account_id]
     user_id = args[:user_id]
     total = ids.size
+    batch_size = 30
 
     account = QboAccount.find(account_id)
     qbo_api = QboApi.new(access_token: account.access_token, realm_id: account.realm_id)
 
     payload = {BatchItemRequest: []}
-    ids.in_groups_of(30).each_with_index do |group_ids, idx|
+    ids.in_groups_of(batch_size).each_with_index do |group_ids, idx|
       group_ids.each do |id_with_name|
         next if id_with_name.nil?
 
@@ -40,7 +41,7 @@ class CustomersBulkDeleteJob < ApplicationJob
         end
       end
 
-      percent = ((idx + 1) * 30 * 100) / total
+      percent = ((idx + 1) * batch_size * 100) / total
       ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: percent >= 100 ? 99 : percent}
     end
 
