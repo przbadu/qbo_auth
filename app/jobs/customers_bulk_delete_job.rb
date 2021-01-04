@@ -1,5 +1,6 @@
 class CustomersBulkDeleteJob < ApplicationJob
   queue_as :default
+  sidekiq_options :retry => 5
 
   def perform(args)
     logs = []
@@ -42,7 +43,7 @@ class CustomersBulkDeleteJob < ApplicationJob
       end
 
       percent = ((idx + 1) * batch_size * 100) / total
-      ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: percent >= 100 ? 99 : percent}
+      ActionCable.server.broadcast "background_job_channel_#{@job_id}", { percent: percent >= 100 ? 99 : percent}
     end
 
     account.activities.create(
@@ -53,6 +54,6 @@ class CustomersBulkDeleteJob < ApplicationJob
       user_id: user_id,
       job_id: @job_id
     )
-    ActionCable.server.broadcast "bulk_delete_channel_#{@job_id}", { percent: 100}
+    ActionCable.server.broadcast "background_job_channel_#{@job_id}", { percent: 100}
   end
 end

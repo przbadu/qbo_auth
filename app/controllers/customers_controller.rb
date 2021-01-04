@@ -25,6 +25,18 @@ class CustomersController < ApplicationController
     render json: { job_id: @job.job_id }
   end
 
+  def export
+    ids = params[:ids]
+    @job = CustomersExportJob.perform_later({
+      ids: params[:ids],
+      account_id: current_account.id,
+      user_id: current_user.id
+    })
+    puts "JOB ID: #{@job.job_id}"
+
+    render json: { job_id: @job.job_id }
+  end
+
   private
 
   def filter_params

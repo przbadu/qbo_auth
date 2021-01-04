@@ -18,8 +18,9 @@ Rails.application.routes.draw do
   resources :vendors, only: :index
   resources :customers, only: [:index] do
     collection do
-      post :mark_inactive
       get :with_logs
+      post :mark_inactive
+      post :export
     end
   end
 
