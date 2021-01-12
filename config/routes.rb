@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
 
-  root 'quickbooks#oauth2'
+  root 'application#home'
   resource :quickbooks, only: [] do
     collection do
       get :oauth2

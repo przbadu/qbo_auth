@@ -4,6 +4,10 @@ class ApplicationController < ActionController::API
   before_action :authenticate_user!, except: :home
   before_action :refresh_token!
 
+  def home
+    render json: { message: 'working!' }
+  end
+
   def current_account
     @current_account ||= current_user.current_account if current_user
   end
