@@ -37,6 +37,7 @@ module QboAuth
     ### Sidekiq queue adapter for active_jobs
     config.active_job.queue_adapter = :sidekiq
 
-    config.hosts << 'qboauth.prod'
+    config.hosts << 'qboapi.tk'
+    config.hosts << 'www.qboapi.tk'
   end
 end
