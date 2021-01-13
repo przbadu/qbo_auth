@@ -27,10 +27,10 @@ class QuickbooksController < ApplicationController
 
       # sign_in_and_redirect user
       token = user.create_new_auth_token
-      code = JWT.encode token, ENV['CLIENT_CALLBACK_URL'], 'HS256'
-      redirect_to "#{ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
+      code = JWT.encode token, CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL'], 'HS256'
+      redirect_to "#{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
     else
-      redirect_to "#{ENV['CLIENT_CALLBACK_URL']}?error=true"
+      redirect_to "#{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?error=true"
     end
   end
 
