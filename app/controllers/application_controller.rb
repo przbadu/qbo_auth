@@ -5,7 +5,11 @@ class ApplicationController < ActionController::API
   before_action :refresh_token!
 
   def home
-    render json: { message: 'working!' }
+    render json: {
+      message: 'working!',
+      server_URL: ENV['QBO_REDIRECT_URL'],
+      client_url: ENV['CLIENT_CALLBACK_URL']
+    }
   end
 
   def current_account
@@ -28,10 +32,16 @@ class ApplicationController < ActionController::API
   def oauth_client
     Rails.logger.warn "URL2::::::::::::#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
 
+    if Rails.env.production?
+      @redirect_url = 'https://qboapi.tk/quickbooks/callback'
+    else
+      @redirect_url = "#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
+    end
+
     IntuitOAuth::Client.new(
       ENV['QBO_CLIENT_ID'],
       ENV['QBO_CLIENT_SECRET'],
-      "#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback",
+      @redirect_url,
       ENV['QBO_PRODUCTION_MODE'].to_s == 'true' ? 'production' : 'development'
     )
   end
