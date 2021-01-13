@@ -28,10 +28,10 @@ class QuickbooksController < ApplicationController
       # sign_in_and_redirect user
       token = user.create_new_auth_token
       code = JWT.encode token, CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL'], 'HS256'
-      Rails.logger.info "Redirecting to #{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
+      logger.debug "Redirecting to #{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
       redirect_to "#{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
     else
-      Rails.logger.info "Redirecting to #{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
+      logger.debug "Redirecting to #{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?code=#{code}"
       redirect_to "#{CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']}?error=true"
     end
   end

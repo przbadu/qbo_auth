@@ -52,4 +52,8 @@ Rails.application.configure do
 
   config.action_cable.url = "ws://localhost:3000/cable"
   config.action_cable.disable_request_forgery_protection = true
+
+  # customize logs
+  Rails.application.middleware.use ConciseLogging::LogMiddleware
+  ConciseLogging::LogSubscriber.attach_to :action_controlle
 end
