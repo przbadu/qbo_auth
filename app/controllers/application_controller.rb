@@ -30,7 +30,7 @@ class ApplicationController < ActionController::API
   end
 
   def oauth_client
-    Rails.logger.warn "URL2::::::::::::#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
+    Rails.logger.info "URL2::::::::::::#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
 
     if Rails.env.production?
       @redirect_url = "#{QBO_REDIRECT_URL}quickbooks/callback"
