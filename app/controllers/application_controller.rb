@@ -7,8 +7,8 @@ class ApplicationController < ActionController::API
   def home
     render json: {
       message: 'working!',
-      server_URL: QBO_REDIRECT_URL,
-      client_url: CLIENT_CALLBACK_URL || ENV['CLIENT_CALLBACK_URL']
+      server_URL: ENV['QBO_REDIRECT_URL'],
+      client_url: ENV['CLIENT_CALLBACK_URL']
     }
   end
 
@@ -33,7 +33,7 @@ class ApplicationController < ActionController::API
     Rails.logger.info "URL2::::::::::::#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
 
     if Rails.env.production?
-      @redirect_url = "#{QBO_REDIRECT_URL}quickbooks/callback"
+      @redirect_url = "#{ENV['QBO_REDIRECT_URL']}quickbooks/callback"
     else
       @redirect_url = "#{ENV['QBO_REDIRECT_URL'] || root_url}quickbooks/callback"
     end
